@@ -11,7 +11,7 @@ export function AuthProvider({ children }) {
     const navigate = useNavigate()
 
     async function login(username, password) {
-        const response = await api.post('auth/login', { username, password })
+        const response = await api.post('/auth/login', { username, password })
         if (!response.ok) return false
 
         const data = await response.json()

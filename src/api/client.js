@@ -14,7 +14,7 @@ async function request(path, options = {}) {
 
     if (response.status === 401) {
         const refreshed = await tryRefresh()
-        if (refreshed) return reuqest(path, options)
+        if (refreshed) return request(path, options)
 
         window.location.href = '/login'
         return

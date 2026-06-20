@@ -16,8 +16,8 @@ export default function DashboardPage() {
         <div>
             <button onClick={logout}>Logout</button>
             {containers.map(c => (
-                <div key={c.conmtainerId}>
-                    {c.containername}
+                <div key={c.containerId}>
+                    {c.containerName}
                 </div>
             ))}
         </div>
