@@ -4,7 +4,7 @@ import { api } from '../api/client'
 
 const AuthContext = createContext(null)
 
-export const AuthProvider = ({ children }) {
+export function AuthProvider({ children }) {
     const [isAuthenitcated, setIsAuthenticated] = useState(
         !!localStorage.getItem('accessToken')
     )
