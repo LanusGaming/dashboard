@@ -1,34 +1,48 @@
 import { createContext, useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { api } from '../api/client'
+import { api, setAccessToken } from '../api/client'
 
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
-    const [isAuthenitcated, setIsAuthenticated] = useState(
-        !!localStorage.getItem('accessToken')
-    )
+    const [accessToken, setToken] = useState(null)
+    const [loading, setLoading] = useState(true)
     const navigate = useNavigate()
+
+    useEffect(() => {
+        api.post('/auth/refresh')
+            .then(r => r?.ok ? r.json() : null)
+            .then(data => {
+                if (data) {
+                    storeToken(data.accessToken)
+                }
+            })
+        .finally(() => setLoading(false))
+    }, [])
+
+    function storeToken(token) {
+        setAccessToken(token)
+        setToken(token)
+    }
 
     async function login(username, password) {
         const response = await api.post('/auth/login', { username, password })
         if (!response.ok) return false
 
         const data = await response.json()
-        localStorage.setItem('accessToken', data.accessToken)
-        localStorage.setItem('refreshToken', data.refreshToken)
-        setIsAuthenticated(true)
-        return true
+        storeToken(data.accessToken)
     }
 
-    function logout() {
-        localStorage.clear()
-        setIsAuthenticated(false)
+    async function logout() {
+        await api.post('/auth/logout')
+        storeToken(null)
         navigate('/login')
     }
 
+    if (loading) return null
+
     return (
-        <AuthContext.Provider value={{ isAuthenitcated, login, logout }}>
+        <AuthContext.Provider value={{ isAuthenitcated: !!accessToken, login, logout }}>
             {children}
         </AuthContext.Provider>
     )

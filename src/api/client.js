@@ -1,13 +1,16 @@
 const BASE_URL = '/api'
+let accessToken = null
+
+export function setAccessToken(token) {
+    accessToken = token
+}
 
 async function request(path, options = {}) {
-    const token = localStorage.getItem('accessToken')
-
     const response = await fetch(`${BASE_URL}${path}`, {
         ...options,
         headers: {
             'Content-Type': 'application/json',
-            ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+            ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {}),
             ...options.headers
         }
     })
@@ -24,26 +27,14 @@ async function request(path, options = {}) {
 }
 
 async function tryRefresh() {
-    const refreshToken = localStorage.getItem('refreshToken')
-    if (!refreshToken) return false
-
     const response = await fetch(`${BASE_URL}/auth/refresh`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ refreshToken })
+        method: 'POST'
     })
     
-    if (!response.ok)
-    {
-        localStorage.clear()
-        return false
-    }
+    if (!response.ok) return false
 
     const data = await response.json()
-    localStorage.setItem('accessToken', data.accessToken)
-    localStorage.setItem('refreshToken', data.refreshToken)
+    setAccessToken(data.accessToken)
     return true
 }
 
