@@ -6,6 +6,7 @@ export function setAccessToken(token) {
 }
 
 async function request(path, options = {}) {
+
     const response = await fetch(`${BASE_URL}${path}`, {
         ...options,
         headers: {
@@ -18,9 +19,9 @@ async function request(path, options = {}) {
     if (response.status === 401) {
         const refreshed = await tryRefresh()
         if (refreshed) return request(path, options)
-
-        window.location.href = '/login'
-        return
+        
+        if (window.location.pathname !== '/login')
+            window.location.href = '/login'
     }
 
     return response
