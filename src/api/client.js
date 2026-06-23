@@ -16,7 +16,7 @@ async function request(path, options = {}) {
         }
     })
 
-    if (response.status === 401) {
+    if (response.status === 401 && path !== '/auth/login') {
         const refreshed = await tryRefresh()
         if (refreshed) return request(path, options)
         
