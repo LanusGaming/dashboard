@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
+import styles from "./LoginPage.module.css"
 
 export default function LoginPage() {
     const { login } = useAuth()
@@ -21,11 +22,21 @@ export default function LoginPage() {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <input name="username" placeholder="Username" />
-            <input name="password" type="password" placeholder="Password" />
-            {error && <div>{error}</div>}
-            <button type="submit">Login</button>
-        </form>
+        <main className={styles.loginPage}>
+            <h1>Dashboard</h1>
+            <p>For all your stats and container controlls in one place</p>
+            <form onSubmit={handleSubmit}>
+                <div className={styles.formField}>
+                    <label htmlFor="username">Username</label>
+                    <input id="username" name="username" placeholder="Username" autoComplete="username" />
+                </div>
+                <div className={styles.formField}>
+                    <label htmlFor="password">Password</label>
+                    <input id="password" name="password" type="password" placeholder="Password" autoComplete="current-password" />
+                </div>
+                {error && <small>{error}</small>}
+                <button type="submit">Login</button>
+            </form>
+        </main>
     )
 }
