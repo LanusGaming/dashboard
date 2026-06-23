@@ -25,8 +25,8 @@ export default function LoginPage() {
             <h1>Dashboard</h1>
             <p>For all your stats and container controlls in one place</p>
             <form onSubmit={handleSubmit}>
-                <input name="username" placeholder="Username" autocomplete="username" />
-                <input name="password" type="password" placeholder="Password" autocomplete="current-password" />
+                <input name="username" placeholder="Username" autoComplete="username" />
+                <input name="password" type="password" placeholder="Password" autoComplete="current-password" />
                 {error && <div>{error}</div>}
                 <button type="submit">Login</button>
             </form>
