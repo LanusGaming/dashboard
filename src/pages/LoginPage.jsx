@@ -21,11 +21,15 @@ export default function LoginPage() {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <input name="username" placeholder="Username" />
-            <input name="password" type="password" placeholder="Password" />
-            {error && <div>{error}</div>}
-            <button type="submit">Login</button>
-        </form>
+        <main>
+            <h1>Dashboard</h1>
+            <p>For all your stats and container controlls in one place</p>
+            <form onSubmit={handleSubmit}>
+                <input name="username" placeholder="Username" autocomplete="username" />
+                <input name="password" type="password" placeholder="Password" autocomplete="current-password" />
+                {error && <div>{error}</div>}
+                <button type="submit">Login</button>
+            </form>
+        </main>
     )
 }
