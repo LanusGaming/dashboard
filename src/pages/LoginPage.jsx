@@ -23,8 +23,10 @@ export default function LoginPage() {
 
     return (
         <main className={styles.loginPage}>
-            <h1>Dashboard</h1>
-            <p>For all your stats and container controlls in one place</p>
+            <header>
+                <h1>Dashboard</h1>
+                <p>For all your stats and container controlls in one place</p>
+            </header>
             <form onSubmit={handleSubmit}>
                 <div className={styles.formField}>
                     <label htmlFor="username">Username</label>

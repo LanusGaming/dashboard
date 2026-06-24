@@ -1,13 +1,27 @@
 .loginPage {
     min-width: 600px;
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    justify-items: center;
+    align-items: center;
+    gap: 4rem;
+}
+
+.loginPage header {
+    height: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: end;
     align-items: center;
 }
 
 .loginPage h1 {
     color: var(--primary);
     font-size: 8rem;
+
+    @media (prefers-color-scheme: dark) {
+        color: var(--accent);
+    }
 }
 
 .loginPage form {
@@ -18,8 +32,7 @@
     gap: 1rem;
     padding: 3rem;
     width: 500px;
-    margin-top: 4rem;
-    background-color: var(--secondary5);
+    background-color: var(--primary15);
     border-radius: 1rem;
     font-family: var(--mono);
 }
@@ -37,10 +50,10 @@
     border-radius: 1rem;
     width: 250px;
     font-family: var(--mono);
-    background-color: var(--secondary20);
+    background-color: var(--primary30);
     
     &::placeholder {
-        color: var(--primary);
+        color: var(--text50);
     }
 
     &:hover {
@@ -52,11 +65,12 @@
 }
 
 .loginPage form button {
+    margin-top: 2rem;
     padding: 1rem 2rem;
     border: 2px solid transparent;
     border-radius: 1rem;
     background-color: var(--primary);
-    color: var(--bg);
+    color: var(--text);
     text-transform: uppercase;
 
     &:hover {
