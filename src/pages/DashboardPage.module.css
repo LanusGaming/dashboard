@@ -1,0 +1,32 @@
+.dashboardPage {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    gap: 2rem;
+}
+
+.systemStats {
+    height: calc(100dvh * 1/3);
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+}
+
+.systemStats div {
+    flex: 1;
+    height: 100%;
+    background-color: var(--primary20);
+    border: 1px solid var(--primary40);
+    border-radius: 1rem;
+    padding: 2rem;
+}
+
+.systemStats div:nth-child(odd) {
+    background-color: var(--accent20);
+    border: 1px solid var(--accent40);
+}
