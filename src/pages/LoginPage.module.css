@@ -4,7 +4,7 @@
     grid-template-rows: repeat(3, 1fr);
     justify-items: center;
     align-items: center;
-    gap: 4rem;
+    gap: 2rem;
 }
 
 .loginPage header {
@@ -17,11 +17,7 @@
 
 .loginPage h1 {
     color: var(--primary);
-    font-size: 8rem;
-
-    @media (prefers-color-scheme: dark) {
-        color: var(--accent);
-    }
+    font-size: 7rem;
 }
 
 .loginPage form {
@@ -32,7 +28,8 @@
     gap: 1rem;
     padding: 3rem;
     width: 500px;
-    background-color: var(--primary15);
+    background-color: var(--primary10);
+    border: 1px solid var(--primary40);
     border-radius: 1rem;
     font-family: var(--mono);
 }
@@ -45,39 +42,43 @@
 
 .formField input {
     padding: 0.75rem;
-    outline: 1px solid var(--accent);
-    border: 2px solid transparent;
+    background-color: var(--primary20);
+    outline: 1px solid var(--primary40);
+    border: none;
     border-radius: 1rem;
     width: 250px;
     font-family: var(--mono);
-    background-color: var(--primary30);
+
+    @media (prefers-color-scheme: dark) {
+        background-color: var(--primary35);
+        outline: 1px solid var(--primary50);
+    }
     
     &::placeholder {
         color: var(--text50);
     }
 
     &:hover {
-        outline: 2px solid var(--accent);
+        outline: 2px solid var(--primary70);
     }
     &:focus-visible {
-        outline: 2px solid var(--accent);
+        outline: 2px solid var(--primary70);
     }
 }
 
 .loginPage form button {
-    margin-top: 2rem;
     padding: 1rem 2rem;
-    border: 2px solid transparent;
+    border: none;
     border-radius: 1rem;
     background-color: var(--primary);
-    color: var(--text);
+    color: white;
     text-transform: uppercase;
 
     &:hover {
-        border: 2px solid var(--accent);
+        background-color: hsl(var(--primary-h) var(--primary-s) 69%);
     }
     &:focus-visible {
-        outline: 2px solid var(--accent);
+        outline: 2px solid var(--primary);
         outline-offset: 2px;
     }
 }

@@ -115,12 +115,9 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
+  @media (prefers-color-scheme: dark) {
     --text-l:    93%;
-    --primary-l: 37%;
     --accent-l:  69%;
     --bg: #130404;
   }
