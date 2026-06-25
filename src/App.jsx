@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
+import Navbar from './components/Navbar'
 import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
 
@@ -16,6 +17,7 @@ export default function App() {
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/" element={
                         <ProtectedRoute>
+                            <Navbar />
                             <DashboardPage />
                         </ProtectedRoute>
                     } />
