@@ -1,4 +1,5 @@
 .dashboardPage {
+    flex: 1;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -8,7 +9,24 @@
 }
 
 .systemStats {
-    height: calc(100dvh * 1/3);
+    height: calc(100dvh * 1/4);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: baseline;
+    align-items: baseline;
+    gap: 1rem;
+}
+
+.systemStats h2 {
+    text-transform: uppercase;
+    font-family: var(--mono);
+    font-size: 1.5rem;
+    color: var(--text50);
+}
+
+.systemStats div {
+    flex: 1;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -17,16 +35,83 @@
     gap: 2rem;
 }
 
-.systemStats div {
+.systemStats .metrics {
     flex: 1;
     height: 100%;
-    background-color: var(--primary20);
+    background-color: var(--primary10);
     border: 1px solid var(--primary40);
     border-radius: 1rem;
     padding: 2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+
+    @media (prefers-color-scheme: dark) {
+        background-color: rgba(255, 255, 255, 0.05);
+        outline: 1px solid rgba(255, 255, 255, 0.10);
+    }
 }
 
-.systemStats div:nth-child(odd) {
-    background-color: var(--accent20);
-    border: 1px solid var(--accent40);
+.systemStats .metrics header {
+    flex: none;
+}
+
+.systemStats .metrics h3 {
+    text-transform: uppercase;
+    font-family: var(--mono);
+    font-size: 1.25rem;
+    color: var(--text50);
+}
+
+.systemStats .metrics span {
+    text-transform: uppercase;
+    font-family: var(--mono);
+    font-size: 3rem;
+    color: var(--primary);
+}
+
+.systemStats .metrics div {
+    flex: 1;
+}
+
+.containerStats {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: baseline;
+    align-items: baseline;
+    gap: 1rem;
+}
+
+.containerStats table {
+    flex: 1;
+    width: 100%;
+    background-color: var(--primary10);
+    border: 1px solid var(--primary40);
+    border-radius: 1rem;
+    padding: 2rem;
+
+    @media (prefers-color-scheme: dark) {
+        background-color: rgba(255, 255, 255, 0.05);
+        outline: 1px solid rgba(255, 255, 255, 0.10);
+    }
+}
+
+.containerStats h2 {
+    text-transform: uppercase;
+    font-family: var(--mono);
+    font-size: 1.5rem;
+    color: var(--text50);
+}
+
+tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.07);
+}
+
+th {
+    font-family: var(--mono);
+    text-align: left;
 }

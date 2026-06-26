@@ -131,6 +131,15 @@
     padding: 0;
 }
 
+html, body, #root {
+  height: 100%;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+}
+
 h1, h2, h3, h4, h5 {
     font-family: var(--heading);
 }

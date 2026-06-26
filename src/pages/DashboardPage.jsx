@@ -17,30 +17,32 @@ export default function DashboardPage() {
             <section className={styles.systemStats}>
                 <h2>System</h2>
                 <div>
-                    <header>
-                        <h3>CPU</h3>
-                        <span>34%</span>
-                    </header>
-                    <div>
-                        Graph
+                    <div className={styles.metrics}>
+                        <header>
+                            <h3>CPU</h3>
+                            <span>34%</span>
+                        </header>
+                        <div>
+                            Graph
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <header>
-                        <h3>Memory</h3>
-                        <span>61%</span>
-                    </header>
-                    <div>
-                        Graph
+                    <div className={styles.metrics}>
+                        <header>
+                            <h3>Memory</h3>
+                            <span>61%</span>
+                        </header>
+                        <div>
+                            Graph
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <header>
-                        <h3>Network</h3>
-                        <span>1.2 MB/s</span>
-                    </header>
-                    <div>
-                        Graph
+                    <div className={styles.metrics}>
+                        <header>
+                            <h3>Network</h3>
+                            <span>1.2 MB/s</span>
+                        </header>
+                        <div>
+                            Graph
+                        </div>
                     </div>
                 </div>
             </section>
@@ -50,12 +52,22 @@ export default function DashboardPage() {
                     <thead>
                         <tr>
                             <th>Name</th>
+                            <th>Status</th>
+                            <th>CPU</th>
+                            <th>Memory</th>
+                            <th>Network</th>
+                            <th>Uptime</th>
                         </tr>
                     </thead>
                     <tbody>
                         {containers.map(c => (
                             <tr key={c.containerId} className={styles.container}>
-                                <th>Container Name</th>
+                                <th>{c.containerName}</th>
+                                <th>running</th>
+                                <th>{(Math.round(c.cpuPercent * 100.0) / 100.0).toFixed(2)} %</th>
+                                <th>{Math.round(c.memoryBytes / 1000000.0)} MB</th>
+                                <th>{Math.round(c.networkRxBytes / 8000.0)} KB/s</th>
+                                <th>14d 2h</th>
                             </tr>
                         ))}
                     </tbody>
