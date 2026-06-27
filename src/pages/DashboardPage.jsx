@@ -7,10 +7,28 @@ export default function DashboardPage() {
     const [containers, setContainers] = useState([])
 
     useEffect(() => {
-        api.get('/containers')
-            .then(res => res.json())
-            .then(setContainers)
-    }, [])
+        const es = new EventSource('/api/containers/stream');
+
+        es.onmessage = (event) => {
+            const containerData = JSON.parse(event.data)
+            setContainers(prevContainers => (
+                containerData.map(container => {
+                    const prevContainer = prevContainers.find(prevContainer => container.ContainerId === prevContainer.ContainerId)
+                    return {
+                        ...container,
+                        PrevNetworkRxBytes: prevContainer == null ? container.NetworkRxBytes : prevContainer.NetworkRxBytes,
+                        PrevNetworkTxBytes: prevContainer == null ? container.NetworkTxBytes : prevContainer.NetworkTxBytes
+                    }
+                })
+            ))
+        }
+
+        es.onerror = () => {
+            // for error handling
+        }
+
+        return () => es.close()
+    }, []);
 
     return (
         <main className={styles.dashboardPage}>
