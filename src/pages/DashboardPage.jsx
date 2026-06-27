@@ -30,6 +30,45 @@ export default function DashboardPage() {
         return () => es.close()
     }, []);
 
+    function formatCpuPercent(cpuPercent) {
+        return `${(Math.round(cpuPercent * 100.0) / 100.0).toFixed(2)}%`
+    }
+
+    function formatMemoryBytes(memoryBytes) {
+        const memoryGB = memoryBytes / 1000000000.0
+        return memoryGB >= 1.0 ? `${(memoryGB).toFixed(2)}GB`: `${Math.round(memoryGB * 1000)}MB`
+    }
+
+    function formatNetworkBytes(networkBytes) {
+        const networkMB = networkBytes / 1000000.0
+        return networkMB >= 1.0 ? `${(networkMB).toFixed(2)}MB/s`: networkMB * 1000 >= 1.0 ? `${Math.round(networkMB * 1000)}KB/s` : `${networkBytes} B/s`
+    }
+
+    function formatUptimeSeconds(uptimeSeconds) {
+        const formats = [{unit: "secs", max: 60}, {unit: "mins", max: 60}, {unit: "hrs", max: 24}, {unit: "days", max: 30}, {unit: "months", max: 12}, {unit: "years", max: 1}]
+
+        let uptime = uptimeSeconds
+        for (const format of formats) {
+            if (uptime < format.max)
+                return Math.floor(uptime) + format.unit
+            else
+                uptime /= format.max
+        }
+
+        return Math.floor(uptime) + formats[-1].unit
+    }
+
+    const statusClasses = {
+        running: styles.running,
+        exited: styles.exited,
+        paused: styles.paused,
+        restarting: styles.restarting,
+    };
+
+    const systemCpu = formatCpuPercent(containers.reduce((sum, c) => sum + c.CpuPercent, 0.0))
+    const systemMemory = formatMemoryBytes(containers.reduce((sum, c) => sum + c.MemoryBytes, 0))
+    const systemNetworkRx = formatNetworkBytes(containers.reduce((sum, c) => sum + c.NetworkRxBytes - c.PrevNetworkRxBytes, 0))
+
     return (
         <main className={styles.dashboardPage}>
             <section className={styles.systemStats}>
@@ -38,7 +77,7 @@ export default function DashboardPage() {
                     <div className={styles.metrics}>
                         <header>
                             <h3>CPU</h3>
-                            <span>34%</span>
+                            <span>{systemCpu}</span>
                         </header>
                         <div>
                             Graph
@@ -47,7 +86,7 @@ export default function DashboardPage() {
                     <div className={styles.metrics}>
                         <header>
                             <h3>Memory</h3>
-                            <span>61%</span>
+                            <span>{systemMemory}</span>
                         </header>
                         <div>
                             Graph
@@ -56,7 +95,7 @@ export default function DashboardPage() {
                     <div className={styles.metrics}>
                         <header>
                             <h3>Network</h3>
-                            <span>1.2 MB/s</span>
+                            <span>{systemNetworkRx}</span>
                         </header>
                         <div>
                             Graph
@@ -66,30 +105,32 @@ export default function DashboardPage() {
             </section>
             <section className={styles.containerStats}>
                 <h2>Containers</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Status</th>
-                            <th>CPU</th>
-                            <th>Memory</th>
-                            <th>Network</th>
-                            <th>Uptime</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {containers.map(c => (
-                            <tr key={c.containerId} className={styles.container}>
-                                <th>{c.containerName}</th>
-                                <th>running</th>
-                                <th>{(Math.round(c.cpuPercent * 100.0) / 100.0).toFixed(2)} %</th>
-                                <th>{Math.round(c.memoryBytes / 1000000.0)} MB</th>
-                                <th>{Math.round(c.networkRxBytes / 8000.0)} KB/s</th>
-                                <th>14d 2h</th>
+                <div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th>CPU</th>
+                                <th>Memory</th>
+                                <th>Network</th>
+                                <th>Uptime</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {containers.map(c => (
+                                <tr key={c.ContainerId} className={styles.container}>
+                                    <th>{c.ContainerName}</th>
+                                    <th><span className={[styles.statusIndicator, statusClasses[c.Status] ?? styles.unknown].join(' ')}>{c.Status}</span></th>
+                                    <th>{formatCpuPercent(c.CpuPercent)}</th>
+                                    <th>{formatMemoryBytes(c.MemoryBytes)}</th>
+                                    <th>{formatNetworkBytes(c.NetworkRxBytes - c.PrevNetworkRxBytes)} | {formatNetworkBytes(c.NetworkTxBytes - c.PrevNetworkTxBytes)}</th>
+                                    <th>{formatUptimeSeconds(c.UptimeSeconds)}</th>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </section>
         </main>
     )

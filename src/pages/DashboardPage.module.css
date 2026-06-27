@@ -8,6 +8,13 @@
     gap: 2rem;
 }
 
+.dashboardPage h2 {
+    text-transform: uppercase;
+    font-family: var(--mono);
+    font-size: 1.25rem;
+    color: var(--text50);
+}
+
 .systemStats {
     height: calc(100dvh * 1/4);
     width: 100%;
@@ -16,13 +23,6 @@
     justify-content: baseline;
     align-items: baseline;
     gap: 1rem;
-}
-
-.systemStats h2 {
-    text-transform: uppercase;
-    font-family: var(--mono);
-    font-size: 1.5rem;
-    color: var(--text50);
 }
 
 .systemStats div {
@@ -39,7 +39,7 @@
     flex: 1;
     height: 100%;
     background-color: var(--primary10);
-    border: 1px solid var(--primary40);
+    border: 1px solid var(--primary50);
     border-radius: 1rem;
     padding: 2rem;
     display: flex;
@@ -68,7 +68,7 @@
 .systemStats .metrics span {
     text-transform: uppercase;
     font-family: var(--mono);
-    font-size: 3rem;
+    font-size: 2rem;
     color: var(--primary);
 }
 
@@ -86,13 +86,12 @@
     gap: 1rem;
 }
 
-.containerStats table {
+.containerStats > div {
     flex: 1;
     width: 100%;
     background-color: var(--primary10);
-    border: 1px solid var(--primary40);
+    border: 1px solid var(--primary50);
     border-radius: 1rem;
-    padding: 2rem;
 
     @media (prefers-color-scheme: dark) {
         background-color: rgba(255, 255, 255, 0.05);
@@ -100,18 +99,47 @@
     }
 }
 
-.containerStats h2 {
+.containerStats table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.containerStats table thead th {
+    border-bottom: 1px solid var(--primary50);
     text-transform: uppercase;
+    font-size: 1.1rem;
     font-family: var(--mono);
-    font-size: 1.5rem;
     color: var(--text50);
 }
 
-tr:nth-child(even) {
-    background-color: rgba(255, 255, 255, 0.07);
-}
-
-th {
+.containerStats th {
     font-family: var(--mono);
     text-align: left;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--primary20);
+
+    &:nth-child(1) { width: 40%; }
+    &:nth-child(2) { width: 10%; }
+    &:nth-child(3) { width: 10%; }
+    &:nth-child(4) { width: 10%; }
+    &:nth-child(5) { width: 20%; }
+    &:nth-child(6) { width: 10%; }
 }
+
+.containerStats .container {
+    &:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.07);
+    }
+}
+
+.statusIndicator {
+    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+}
+
+.running    { color: var(--status-success); background-color: var(--status-success-subtle); }
+.exited     { color: var(--status-failure); background-color: var(--status-failure-subtle); }
+.paused     { color: var(--status-warning); background-color: var(--status-warning-subtle); }
+.restarting { color: var(--status-warning); background-color: var(--status-warning-subtle); }
+.unknown    { color: var(--status-muted); background-color: var(--status-muted-subtle); }
