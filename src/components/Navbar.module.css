@@ -1,0 +1,57 @@
+.navbar {
+    position: sticky;
+    width: 100%;
+    top: 0;
+    z-index: 100;
+    background-color: hsl(var(--primary-h) var(--primary-s) var(--primary-l) / 10%);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: var(--primary);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--primary50);
+}
+
+.navbar button {
+    background-color: transparent;
+    border: none;
+    color: var(--primary);
+    padding: 0.5rem 1rem;
+
+    &:hover {
+        text-decoration: underline;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 0.25rem;
+    }
+
+    &:focus-visible {
+        outline: none;
+        text-decoration: underline;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 0.25rem;
+    }
+}
+
+.navbar h1 {
+    font-size: 2rem;
+}
+
+.navbarItem svg {
+    width: 1.75rem;
+    height: 1.75rem;
+    fill: currentColor;
+    fill-opacity: 0;
+    transition: fill-opacity 0.2s ease, stroke-width 0.2s ease;
+}
+
+.navbarItem:hover svg {
+    fill-opacity: 1;
+    stroke-width: 0;
+}
+
+.navbarItem:focus-visible svg {
+    fill-opacity: 1;
+    stroke-width: 0;
+}

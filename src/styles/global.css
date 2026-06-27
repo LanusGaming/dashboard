@@ -9,12 +9,12 @@
   --primary-s: 88%;
   --primary-l: 63%;
 
-  --secondary-h: 25; /*0;*/
-  --secondary-s: 90%; /*100%;*/
+  --secondary-h: 25;
+  --secondary-s: 90%;
   --secondary-l: 50%;
 
-  --accent-h: 345;/*0;*/
-  --accent-s: 80%; /*100%;*/
+  --accent-h: 345;
+  --accent-s: 80%;
   --accent-l: 31%;
 
   --text:      hsl(var(--text-h)      var(--text-s)      var(--text-l));
@@ -103,6 +103,37 @@
   --accent90: hsl(var(--accent-h) var(--accent-s) var(--accent-l) / 90%);
   --accent95: hsl(var(--accent-h) var(--accent-s) var(--accent-l) / 95%);
 
+
+  /* STATUS COLORS */
+
+  --status-success-h: 142;
+  --status-success-s: 60%;
+  --status-success-l: 45%;
+  --status-success:        hsl(var(--status-success-h) var(--status-success-s) var(--status-success-l));
+  --status-success-subtle: hsl(var(--status-success-h) var(--status-success-s) var(--status-success-l) / 15%);
+  --status-success-border: hsl(var(--status-success-h) var(--status-success-s) var(--status-success-l) / 35%);
+
+  --status-failure-h: 0;
+  --status-failure-s: 75%;
+  --status-failure-l: 55%;
+  --status-failure:        hsl(var(--status-failure-h) var(--status-failure-s) var(--status-failure-l));
+  --status-failure-subtle: hsl(var(--status-failure-h) var(--status-failure-s) var(--status-failure-l) / 15%);
+  --status-failure-border: hsl(var(--status-failure-h) var(--status-failure-s) var(--status-failure-l) / 35%);
+
+  --status-warning-h: 50;
+  --status-warning-s: 75%;
+  --status-warning-l: 50%;
+  --status-warning:        hsl(var(--status-warning-h) var(--status-warning-s) var(--status-warning-l));
+  --status-warning-subtle: hsl(var(--status-warning-h) var(--status-warning-s) var(--status-warning-l) / 15%);
+  --status-warning-border: hsl(var(--status-warning-h) var(--status-warning-s) var(--status-warning-l) / 35%);
+
+  --status-muted-h: 0;
+  --status-muted-s: 0%;
+  --status-muted-l: 50%;
+  --status-muted:        hsl(var(--status-muted-h) var(--status-muted-s) var(--status-muted-l));
+  --status-muted-subtle: hsl(var(--status-muted-h) var(--status-muted-s) var(--status-muted-l) / 15%);
+  --status-muted-border: hsl(var(--status-muted-h) var(--status-muted-s) var(--status-muted-l) / 35%);
+
   --sans: "DM Sans", system-ui, sans-serif;
   --heading: "DM Serif Display", system-ui, serif;
   --mono: "DM Mono", ui-monospace, monospace;
@@ -117,9 +148,11 @@
   -moz-osx-font-smoothing: grayscale;
 
   @media (prefers-color-scheme: dark) {
-    --text-l:    93%;
-    --accent-l:  69%;
-    --bg: #130404;
+    --text-l: 93%;
+    --primary-s: 45%;
+    --accent-s: 40%;
+    --accent-l: 69%;
+    --bg: #160a0a;
   }
 }
 
@@ -129,13 +162,13 @@
     padding: 0;
 }
 
-body {
-    height: 100dvh;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+html, body, #root {
+  height: 100%;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
 }
 
 h1, h2, h3, h4, h5 {
