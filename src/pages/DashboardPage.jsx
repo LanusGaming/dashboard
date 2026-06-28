@@ -44,20 +44,6 @@ export default function DashboardPage() {
         return networkMB >= 1.0 ? `${(networkMB).toFixed(2)}MB/s`: networkMB * 1000 >= 1.0 ? `${Math.round(networkMB * 1000)}KB/s` : `${networkBytes} B/s`
     }
 
-    function formatUptimeSeconds(uptimeSeconds) {
-        const formats = [{unit: "secs", max: 60}, {unit: "mins", max: 60}, {unit: "hrs", max: 24}, {unit: "days", max: 30}, {unit: "months", max: 12}, {unit: "years", max: 1}]
-
-        let uptime = uptimeSeconds
-        for (const format of formats) {
-            if (uptime < format.max)
-                return Math.floor(uptime) + format.unit
-            else
-                uptime /= format.max
-        }
-
-        return Math.floor(uptime) + formats[-1].unit
-    }
-
     const statusClasses = {
         running: styles.running,
         exited: styles.exited,
@@ -125,7 +111,7 @@ export default function DashboardPage() {
                                     <th>{formatCpuPercent(c.CpuPercent)}</th>
                                     <th>{formatMemoryBytes(c.MemoryBytes)}</th>
                                     <th>{formatNetworkBytes(c.NetworkRxBytes - c.PrevNetworkRxBytes)} | {formatNetworkBytes(c.NetworkTxBytes - c.PrevNetworkTxBytes)}</th>
-                                    <th>{formatUptimeSeconds(c.UptimeSeconds)}</th>
+                                    <th>{c.Uptime}</th>
                                 </tr>
                             ))}
                         </tbody>
