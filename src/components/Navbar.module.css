@@ -5,7 +5,6 @@
     z-index: 100;
     background-color: hsl(var(--primary-h) var(--primary-s) var(--primary-l) / 10%);
     backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
     color: var(--primary);
     display: flex;
     flex-direction: row;
