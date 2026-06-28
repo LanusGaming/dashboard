@@ -17,7 +17,9 @@ export default function DashboardPage() {
                     return {
                         ...container,
                         PrevNetworkRxBytes: prevContainer == null ? container.NetworkRxBytes : prevContainer.NetworkRxBytes,
-                        PrevNetworkTxBytes: prevContainer == null ? container.NetworkTxBytes : prevContainer.NetworkTxBytes
+                        PrevNetworkTxBytes: prevContainer == null ? container.NetworkTxBytes : prevContainer.NetworkTxBytes,
+                        RecordedAt: new Date(container.RecordedAt),
+                        MillisSinceLastUpdate: prevContainer == null ? Number.MAX_VALUE : new Date(container.RecordedAt) - prevContainer.RecordedAt,
                     }
                 })
             ))
@@ -36,16 +38,20 @@ export default function DashboardPage() {
 
     function formatMemoryBytes(memoryBytes) {
         const memoryGB = memoryBytes / 1000000000.0
-        return memoryGB >= 1.0 ? `${(memoryGB).toFixed(2)}GB`: `${Math.round(memoryGB * 1000)}MB`
+        return memoryGB >= 1.0 ? `${(memoryGB).toFixed(2)}GB` : `${Math.round(memoryGB * 1000)}MB`
     }
 
     function formatNetworkBytes(networkBytes) {
         const networkMB = networkBytes / 1000000.0
-        return networkMB >= 1.0 ? `${(networkMB).toFixed(2)}MB/s`: networkMB * 1000 >= 1.0 ? `${Math.round(networkMB * 1000)}KB/s` : `${networkBytes} B/s`
+        return networkMB >= 1.0
+            ? `${(networkMB).toFixed(2)}MB/s`
+            : networkMB * 1000 >= 1.0
+                ? `${Math.round(networkMB * 1000)}KB/s`
+                : `${Math.round(networkBytes)} B/s`
     }
 
     function formatUptimeSeconds(uptimeSeconds) {
-        const formats = [{unit: "secs", max: 60}, {unit: "mins", max: 60}, {unit: "hrs", max: 24}, {unit: "days", max: 30}, {unit: "months", max: 12}, {unit: "years", max: 1}]
+        const formats = [{ unit: "secs", max: 60 }, { unit: "mins", max: 60 }, { unit: "hrs", max: 24 }, { unit: "days", max: 30 }, { unit: "months", max: 12 }, { unit: "years", max: 1 }]
 
         let uptime = uptimeSeconds
         for (const format of formats) {
@@ -67,7 +73,7 @@ export default function DashboardPage() {
 
     const systemCpu = formatCpuPercent(containers.reduce((sum, c) => sum + c.CpuPercent, 0.0))
     const systemMemory = formatMemoryBytes(containers.reduce((sum, c) => sum + c.MemoryBytes, 0))
-    const systemNetworkRx = formatNetworkBytes(containers.reduce((sum, c) => sum + c.NetworkRxBytes - c.PrevNetworkRxBytes, 0))
+    const systemNetworkRx = formatNetworkBytes(containers.reduce((sum, c) => sum + (c.NetworkRxBytes - c.PrevNetworkRxBytes) / c.MillisSinceLastUpdate * 1000, 0))
 
     return (
         <main className={styles.dashboardPage}>
@@ -124,7 +130,7 @@ export default function DashboardPage() {
                                     <th><span className={[styles.statusIndicator, statusClasses[c.Status] ?? styles.unknown].join(' ')}>{c.Status}</span></th>
                                     <th>{formatCpuPercent(c.CpuPercent)}</th>
                                     <th>{formatMemoryBytes(c.MemoryBytes)}</th>
-                                    <th>{formatNetworkBytes(c.NetworkRxBytes - c.PrevNetworkRxBytes)} | {formatNetworkBytes(c.NetworkTxBytes - c.PrevNetworkTxBytes)}</th>
+                                    <th>{formatNetworkBytes((c.NetworkRxBytes - c.PrevNetworkRxBytes) / c.MillisSinceLastUpdate * 1000)} | {formatNetworkBytes((c.NetworkTxBytes - c.PrevNetworkTxBytes) / c.MillisSinceLastUpdate * 1000)}</th>
                                     <th>{formatUptimeSeconds(c.UptimeSeconds)}</th>
                                 </tr>
                             ))}
