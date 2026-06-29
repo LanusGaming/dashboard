@@ -1,0 +1,44 @@
+services:
+
+  # Idle baseline — low everything
+  idle-alpha:
+    image: alpine
+    command: sleep infinity
+
+  # High CPU — tight compute loop
+  cpu-heavy-beta:
+    image: alpine
+    command: sh -c "while true; do awk 'BEGIN{for(i=0;i<1000000;i++) x=sin(i)}'; done"
+
+  # Medium CPU — compute with sleep gaps
+  cpu-medium-gamma:
+    image: alpine
+    command: sh -c "while true; do awk 'BEGIN{for(i=0;i<200000;i++) x=sin(i)}'; sleep 2; done"
+
+  # High memory — allocates ~200MB and holds it
+  mem-heavy-delta:
+    image: python:3.12-alpine
+    command: python3 -c "x = bytearray(200*1024*1024); import time; time.sleep(999999)"
+
+  # Medium memory — holds ~60MB
+  mem-medium-epsilon:
+    image: python:3.12-alpine
+    command: python3 -c "x = bytearray(60*1024*1024); import time; time.sleep(999999)"
+
+  # Network target — simple nginx to serve requests
+  web-zeta:
+    image: nginx:alpine
+
+  # High network — hammers web-zeta in a tight loop
+  net-heavy-eta:
+    image: alpine
+    command: sh -c "while true; do wget -q -O /dev/null http://web-zeta/; done"
+    depends_on:
+      - web-zeta
+
+  # Medium network — same but with a small sleep
+  net-medium-theta:
+    image: alpine
+    command: sh -c "while true; do wget -q -O /dev/null http://web-zeta/; sleep 0.5; done"
+    depends_on:
+      - web-zeta
