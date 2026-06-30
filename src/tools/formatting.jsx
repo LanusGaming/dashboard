@@ -79,10 +79,10 @@ export function sortContainers(containers, sortMetric, sortAlphabeticallyAscendi
                 equality = a.MemoryBytes - b.MemoryBytes
                 break;
             case "networkRx":
-                equality = (a.NetworkRxBytes - a.PrevNetworkRxBytes) - (b.NetworkRxBytes - b.PrevNetworkRxBytes)
+                equality = a.NetworkRxBytesPerSecond - b.NetworkRxBytesPerSecond
                 break;
             case "networkTx":
-                equality = (a.NetworkTxBytes - a.PrevNetworkTxBytes) - (b.NetworkTxBytes - b.PrevNetworkTxBytes)
+                equality = a.NetworkTxBytesPerSecond - b.NetworkTxBytesPerSecond
                 break;
             case "uptime":
                 equality = a.UptimeSeconds - b.UptimeSeconds
