@@ -177,12 +177,87 @@ export default function DashboardPage() {
             </section>
             <section className={styles.containerStats}>
                 <h2>Containers</h2>
-                <div>
-                    <table>
+                <div role="table">
+                    <div className={styles.tableHead} role="row">
+                        <button onClick={() => setSortAlphabeticallyAscending(prev => !prev)} role="columnheader">
+                            <h3>Name</h3>
+                            {sortAlphabeticallyAscending
+                                ? <ArrowDownAZ />
+                                : <ArrowDownZA />
+                            }
+                        </button>
+                        <button onClick={() => flipSortMetric("status", false)} role="columnheader">
+                            <h3>Status</h3>
+                            {sortMetric.value === "status" && !sortMetric.asc
+                                ? <ArrowDown01 />
+                                : <ArrowDown10 />
+                            }
+                        </button>
+                        <button onClick={() => flipSortMetric("cpu", false)} role="columnheader">
+                            <h3>CPU</h3>
+                            {sortMetric.value !== "cpu"
+                                ? <ArrowDownUp />
+                                : sortMetric.asc
+                                    ? <ArrowDownNarrowWide />
+                                    : <ArrowDownWideNarrow />
+                            }
+                        </button>
+                        <button onClick={() => flipSortMetric("memory", false)} role="columnheader">
+                            <h3>Memory</h3>
+                            {sortMetric.value !== "memory"
+                                ? <ArrowDownUp />
+                                : sortMetric.asc
+                                    ? <ArrowDownNarrowWide />
+                                    : <ArrowDownWideNarrow />
+                            }
+                        </button>
+                        <button onClick={() => flipSortMetric("networkRx", false)} role="columnheader">
+                            <h3>Network</h3>
+                            {sortMetric.value !== "networkRx"
+                                ? <ArrowDownUp />
+                                : sortMetric.asc
+                                    ? <ArrowDownNarrowWide />
+                                    : <ArrowDownWideNarrow />
+                            }
+                        </button>
+                        <button onClick={() => flipSortMetric("uptime", true)} role="columnheader">
+                            <h3>Uptime</h3>
+                            {sortMetric.value !== "uptime"
+                                ? <ArrowDownUp />
+                                : sortMetric.asc
+                                    ? <ArrowDownNarrowWide />
+                                    : <ArrowDownWideNarrow />
+                            }
+                        </button>
+                    </div>
+                    {sortContainers().map(c => (
+                        <div key={c.ContainerId} className={[styles.container, statusClasses[c.Status] ?? styles.unknown].join(' ')} role="row">
+                            <span role="cell">{c.ContainerName}</span>
+                            <span className={[styles.statusIndicator, statusClasses[c.Status] ?? styles.unknown].join(' ')} role="cell">{c.Status}</span>
+                            <span role="cell">{c.Status === 'exited' ? '-' : formatCpuPercent(c.CpuPercent)}</span>
+                            <span role="cell">{c.Status === 'exited' ? '-' : formatMemoryBytes(c.MemoryBytes)}</span>
+                            <span className={styles.network} role="cell">
+                                {c.Status === 'exited' ? '-' :
+                                    <>
+                                        <div>
+                                            <Download />
+                                            <span>{formatNetworkBytes((c.NetworkRxBytes - c.PrevNetworkRxBytes) / c.MillisSinceLastUpdate * 1000)}</span>
+                                        </div>
+                                        <div>
+                                            <Upload />
+                                            <span>{formatNetworkBytes((c.NetworkTxBytes - c.PrevNetworkTxBytes) / c.MillisSinceLastUpdate * 1000)}</span>
+                                        </div>
+                                    </>
+                                }
+                            </span>
+                            <span role="cell">{c.Status === 'exited' ? '-' : formatUptimeSeconds(c.UptimeSeconds)}</span>
+                        </div>
+                    ))}
+                    <table style={{display: "none"}}>
                         <thead>
                             <tr>
                                 <th><span>
-                                    <h3>Name</h3>
+
                                     <button onClick={() => setSortAlphabeticallyAscending(prev => !prev)}>
                                         {sortAlphabeticallyAscending
                                             ? <ArrowDownAZ />
