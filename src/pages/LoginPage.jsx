@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { UserRound, KeyRound } from 'lucide-react'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../contexts/useAuth'
 import styles from "./LoginPage.module.css"
 
 export default function LoginPage() {
@@ -26,7 +26,7 @@ export default function LoginPage() {
         <main className={styles.loginPage}>
             <header>
                 <h1>Dashboard</h1>
-                <p>For all your stats and container controlls in one place</p>
+                <p>For all your stats and container controls in one place</p>
             </header>
             <form onSubmit={handleSubmit}>
                 <div className={styles.formField}>

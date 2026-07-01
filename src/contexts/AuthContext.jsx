@@ -1,8 +1,7 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { api, setAccessToken } from '../api/client'
-
-const AuthContext = createContext(null)
+import { AuthContext } from './authContext'
 
 export function AuthProvider({ children }) {
     const [accessToken, setToken] = useState(null)
@@ -44,10 +43,8 @@ export function AuthProvider({ children }) {
     if (loading) return null
 
     return (
-        <AuthContext.Provider value={{ isAuthenitcated: !!accessToken, login, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated: !!accessToken, login, logout }}>
             {children}
         </AuthContext.Provider>
     )
 }
-
-export const useAuth = () => useContext(AuthContext)

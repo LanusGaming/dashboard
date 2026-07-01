@@ -1,12 +1,13 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { AuthProvider, useAuth } from './contexts/AuthContext'
+import { AuthProvider } from './contexts/AuthContext'
+import { useAuth } from './contexts/useAuth'
 import Navbar from './components/Navbar'
 import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
 
 function ProtectedRoute({ children }) {
-    const { isAuthenitcated } = useAuth()
-    return isAuthenitcated ? children : <Navigate to="/login" />
+    const { isAuthenticated } = useAuth()
+    return isAuthenticated ? children : <Navigate to="/login" />
 }
 
 export default function App() {
