@@ -34,7 +34,7 @@ export default function DashboardPage() {
             })
         }
 
-        es.onerror = () => { /** for error handling */ }
+        es.onerror = (event) => { console.log(event) }
 
         return () => es.close()
     }, []);
