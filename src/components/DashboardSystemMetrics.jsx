@@ -1,5 +1,5 @@
 import { Download, Upload } from 'lucide-react'
-import { formatCpuPercent, formatMemoryBytes, formatNetworkBytes, formatUptimeSeconds } from "../tools/formatting"
+import { formatCpuPercent, formatMemoryBytes, formatNetworkBytes, formatUptimeSeconds } from "../utils/formatting"
 import styles from "./DashboardSystemMetrics.module.css"
 
 export default function DashboardSystemMetrics({ containers }) {
