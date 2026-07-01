@@ -4,7 +4,7 @@ import { sortContainers } from "../utils/sorting"
 import DashboardContainer from "../components/DashboardContainer"
 import styles from "./DashboardContainerMetrics.module.css"
 
-export default function DashboardContainerMetrics({ containers }) {
+export default function DashboardContainerMetrics({ containerSummaries }) {
     const [sortMetric, setSortMetric] = useState({ value: "status", asc: true })
     const [sortAlphabeticallyAscending, setSortAlphabeticallyAscending] = useState(true)
 
@@ -71,8 +71,8 @@ export default function DashboardContainerMetrics({ containers }) {
                         }
                     </button>
                 </div>
-                {containers != null && sortContainers(containers, sortMetric, sortAlphabeticallyAscending).map(c => (
-                    <DashboardContainer key={c.ContainerId} container={c} />
+                {containerSummaries != null && sortContainers(containerSummaries, sortMetric, sortAlphabeticallyAscending).map(containerSummary => (
+                    <DashboardContainer key={containerSummary.ContainerId} containerSummary={containerSummary} />
                 ))}
             </div>
         </section>

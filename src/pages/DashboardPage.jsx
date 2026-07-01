@@ -1,36 +1,42 @@
 import { useEffect, useState } from 'react'
-import { api } from '../api/client'
 import DashboardSystemMetrics from "../components/DashboardSystemMetrics"
 import DashboardContainerMetrics from "../components/DashboardContainerMetrics"
 import styles from './DashboardPage.module.css'
 
 export default function DashboardPage() {
-    const [containers, setContainers] = useState([])
+    const [containerSummarySnapshots, setContainerSummarySnapshots] = useState([])
 
     useEffect(() => {
         const es = new EventSource('/api/containers/stream');
 
         es.onmessage = (event) => {
-            const containerData = JSON.parse(event.data)
-            setContainers(prevContainers => {
-                const lastSnapshot = prevContainers[prevContainers.length - 1]
+            const containerSummaries = JSON.parse(event.data)
+            setContainerSummarySnapshots(prevContainerSummarySnapshots => {
+                const lastSnapshot = prevContainerSummarySnapshots.at(-1)
 
-                const newSnapshot = containerData.map(container => {
-                    const prevContainer = lastSnapshot?.find(pc => pc.ContainerId === container.ContainerId)
-                    if (!prevContainer)
-                        return { ...container, NetworkRxBytesPerSecond: 0, NetworkTxBytesPerSecond: 0 }
+                const newSnapshot = containerSummaries.map(containerSummary => {
+                    const prevContainerSummary = lastSnapshot?.find(summary => summary.ContainerId === containerSummary.ContainerId)
+                    if (!prevContainerSummary)
+                        return { ...containerSummary, NetworkRxBytesPerSecond: 0, NetworkTxBytesPerSecond: 0 }
 
-                    const secondsSinceLastUpdate =
-                        (new Date(container.RecordedAt).getTime() - new Date(prevContainer.RecordedAt).getTime()) / 1000.0
+                    const secondsSinceLastSummary =
+                        (new Date(containerSummary.RecordedAt).getTime() - new Date(prevContainerSummary.RecordedAt).getTime()) / 1000.0
+
+                    if (secondsSinceLastSummary <= 0)
+                        return { ...containerSummary, NetworkRxBytesPerSecond: 0, NetworkTxBytesPerSecond: 0 }
+
+                    // Byte counters reset when a container restarts, so a negative delta means "no traffic" rather than a real rate.
+                    const rxDelta = Math.max(0, containerSummary.NetworkRxBytes - prevContainerSummary.NetworkRxBytes)
+                    const txDelta = Math.max(0, containerSummary.NetworkTxBytes - prevContainerSummary.NetworkTxBytes)
 
                     return {
-                        ...container,
-                        NetworkRxBytesPerSecond: (container.NetworkRxBytes - prevContainer.NetworkRxBytes) / secondsSinceLastUpdate,
-                        NetworkTxBytesPerSecond: (container.NetworkTxBytes - prevContainer.NetworkTxBytes) / secondsSinceLastUpdate,
+                        ...containerSummary,
+                        NetworkRxBytesPerSecond: rxDelta / secondsSinceLastSummary,
+                        NetworkTxBytesPerSecond: txDelta / secondsSinceLastSummary,
                     }
                 })
 
-                return [...prevContainers, newSnapshot].slice(-11)
+                return [...prevContainerSummarySnapshots, newSnapshot].slice(-11)
             })
         }
 
@@ -41,8 +47,8 @@ export default function DashboardPage() {
 
     return (
         <main className={styles.dashboardPage}>
-            <DashboardSystemMetrics containers={containers.at(-1)} />
-            <DashboardContainerMetrics containers={containers.at(-1)} />
+            <DashboardSystemMetrics containerSnapshots={containerSummarySnapshots} />
+            <DashboardContainerMetrics containerSummaries={containerSummarySnapshots.at(-1)} />
         </main>
     )
 }

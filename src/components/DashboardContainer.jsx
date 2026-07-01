@@ -1,15 +1,15 @@
 import { Download, Upload } from "lucide-react"
-import { formatCpuPercent, formatMemoryBytes, formatNetworkBytes, formatUptimeSeconds } from "../utils/formatting"
+import { formats, formatMetric, getMetricComponent } from "../utils/formatting"
 import styles from "./DashboardContainer.module.css"
 
-export default function DashboardContainer({ container }) {
-    const name = container.ContainerName
-    const status = container.Status
-    const cpu = formatCpuPercent(container.CpuPercent)
-    const memory = formatMemoryBytes(container.MemoryBytes)
-    const networkRx = formatNetworkBytes(container.NetworkRxBytesPerSecond)
-    const networkTx = formatNetworkBytes(container.NetworkTxBytesPerSecond)
-    const uptime = formatUptimeSeconds(container.UptimeSeconds)
+export default function DashboardContainer({ containerSummary }) {
+    const name = containerSummary.ContainerName
+    const status = containerSummary.Status
+    const cpu = getMetricComponent(formatMetric(containerSummary.CpuPercent, formats.cpu))
+    const memory = getMetricComponent(formatMetric(containerSummary.MemoryBytes, formats.memory))
+    const networkRx = getMetricComponent(formatMetric(containerSummary.NetworkRxBytesPerSecond, formats.network))
+    const networkTx = getMetricComponent(formatMetric(containerSummary.NetworkTxBytesPerSecond, formats.network))
+    const uptime = getMetricComponent(formatMetric(containerSummary.UptimeSeconds, formats.uptime))
 
     const statusClasses = {
         running: styles.running,
@@ -24,7 +24,7 @@ export default function DashboardContainer({ container }) {
                 <button>{name}</button>
             </div>
             <div role="cell">
-                <span className={[styles.statusIndicator, statusClasses[container.Status] ?? styles.unknown].join(' ')}>{container.Status}</span>
+                <span className={[styles.statusIndicator, statusClasses[containerSummary.Status] ?? styles.unknown].join(' ')}>{containerSummary.Status}</span>
             </div>
             <div role="cell">
                 <span>{status === 'exited' ? '-' : cpu}</span>
