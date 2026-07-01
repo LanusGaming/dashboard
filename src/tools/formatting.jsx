@@ -45,7 +45,7 @@ export function formatUptimeSeconds(uptimeSeconds) {
             uptime /= format.max
     }
 
-    return formatMetric(Math.floor(uptime), formats[-1].unit)
+    return formatMetric(Math.floor(uptime), formats[formats.length - 1].unit)
 }
 
 export function sortContainers(containers, sortMetric, sortAlphabeticallyAscending) {
