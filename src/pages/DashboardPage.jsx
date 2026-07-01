@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Download, Upload, ArrowDownAZ, ArrowDownZA, ArrowDown10, ArrowDown01, ArrowDownUp, ArrowDownWideNarrow, ArrowDownNarrowWide } from 'lucide-react'
 import { api } from '../api/client'
-import { formatCpuPercent, formatMemoryBytes, formatNetworkBytes, formatUptimeSeconds, sortContainers } from "../tools/formatting"
+import DashboardSystemMetrics from "../components/DashboardSystemMetrics"
 import DashboardContainer from "../components/DashboardContainer"
 import styles from './DashboardPage.module.css'
 
@@ -22,7 +22,7 @@ export default function DashboardPage() {
                     const prevContainer = lastSnapshot?.find(pc => pc.ContainerId === container.ContainerId)
                     if (!prevContainer)
                         return { ...container, NetworkRxBytesPerSecond: 0, NetworkTxBytesPerSecond: 0 }
-                    
+
                     const secondsSinceLastUpdate =
                         (new Date(container.RecordedAt).getTime() - new Date(prevContainer.RecordedAt).getTime()) / 1000.0
 
@@ -49,46 +49,11 @@ export default function DashboardPage() {
             setSortMetric({ value: metric, asc: defaultAscending })
     }
 
-    const systemCpu = formatCpuPercent(containers.length > 0 ? containers[containers.length - 1].reduce((sum, c) => sum + c.CpuPercent, 0.0) : 0)
-    const systemMemory = formatMemoryBytes(containers.length > 0 ? containers[containers.length - 1].reduce((sum, c) => sum + c.MemoryBytes, 0) : 0)
-    const systemNetworkRx = formatNetworkBytes(containers.length > 0 ? containers[containers.length - 1].reduce((sum, c) => sum + c.NetworkRxBytesPerSecond, 0) : 0)
-    const systemNetworkTx = formatNetworkBytes(containers.length > 0 ? containers[containers.length - 1].reduce((sum, c) => sum + c.NetworkTxBytesPerSecond, 0) : 0)
+    
 
     return (
         <main className={styles.dashboardPage}>
-            <section className={styles.systemStats}>
-                <h2>System</h2>
-                <div>
-                    <div className={styles.systemMetric}>
-                        <header>
-                            <h3>CPU</h3>
-                            <span>{systemCpu}</span>
-                        </header>
-                        <div>
-                            Graph
-                        </div>
-                    </div>
-                    <div className={styles.systemMetric}>
-                        <header>
-                            <h3>Memory</h3>
-                            <span>{systemMemory}</span>
-                        </header>
-                        <div>
-                            Graph
-                        </div>
-                    </div>
-                    <div className={styles.systemMetric}>
-                        <header>
-                            <h3>Network</h3>
-                            <span><Download />{systemNetworkRx}</span>
-                            <span><Upload />{systemNetworkTx}</span>
-                        </header>
-                        <div>
-                            Graph
-                        </div>
-                    </div>
-                </div>
-            </section>
+            <DashboardSystemMetrics containers={containers.at(-1)} />
             <section className={styles.containerStats}>
                 <h2>Containers</h2>
                 <div className={styles.table} role="table">
