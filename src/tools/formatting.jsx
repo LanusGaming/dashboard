@@ -1,16 +1,7 @@
-import styles from "../pages/DashboardPage.module.css"
-
-export const statusClasses = {
-    running: styles.running,
-    exited: styles.exited,
-    paused: styles.paused,
-    restarting: styles.restarting,
-}
-
 function formatMetric(value, unit) {
-    return <span className={styles.metric}>
+    return <span>
         {value}
-        <span className={styles.unit}>{unit}</span>
+        <span style={{ opacity: "50%", fontSize: "0.8em" }}>{unit}</span>
     </span>
 }
 

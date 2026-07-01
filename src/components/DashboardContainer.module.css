@@ -1,0 +1,67 @@
+.container {
+    font-family: var(--mono);
+    text-align: left;
+    border-bottom: 1px solid var(--primary20);
+
+    &.exited {
+        opacity: 50%;
+    }
+}
+
+.container > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: baseline;
+    align-items: center;
+}
+
+.container .statusIndicator {
+    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+
+    &.running {
+        color: var(--status-success);
+        background-color: var(--status-success-subtle);
+    }
+
+    &.exited {
+        color: var(--status-failure);
+        background-color: var(--status-failure-subtle);
+    }
+
+    &.paused {
+        color: var(--status-warning);
+        background-color: var(--status-warning-subtle);
+    }
+
+    &.restarting {
+        color: var(--status-warning);
+        background-color: var(--status-warning-subtle);
+    }
+
+    &.unknown {
+        color: var(--status-muted);
+        background-color: var(--status-muted-subtle);
+    }
+}
+
+.container .network {
+    display: flex;
+    flex-direction: row;
+    justify-content: baseline;
+    align-items: center;
+    gap: 1rem;
+
+    & > div {
+        display: flex;
+        flex-direction: row;
+        justify-content: baseline;
+        align-items: center;
+        gap: 0.25rem;
+    }
+}
+
+.container .network svg {
+    height: 1rem;
+    width: 1rem;
+}

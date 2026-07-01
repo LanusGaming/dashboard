@@ -16,22 +16,24 @@ export default function DashboardPage() {
         es.onmessage = (event) => {
             const containerData = JSON.parse(event.data)
             setContainers(prevContainers => {
-                prevContainers.push(containerData.map(container => {
-                    if (prevContainers.length === 0)
+                const lastSnapshot = prevContainers[prevContainers.length - 1]
+
+                const newSnapshot = containerData.map(container => {
+                    const prevContainer = lastSnapshot?.find(pc => pc.ContainerId === container.ContainerId)
+                    if (!prevContainer)
                         return { ...container, NetworkRxBytesPerSecond: 0, NetworkTxBytesPerSecond: 0 }
                     
-                    const prevContainer = prevContainers[prevContainers.length - 1].find(pc => pc.ContainerId === container.ContainerId)
-                    if (prevContainer === undefined)
-                        return { ...container, NetworkRxBytesPerSecond: 0, NetworkTxBytesPerSecond: 0 }
+                    const secondsSinceLastUpdate =
+                        (new Date(container.RecordedAt).getTime() - new Date(prevContainer.RecordedAt).getTime()) / 1000.0
 
-                    const SecondsSinceLastUpdate = ((new Date(container.RecordedAt)).getTime() - (new Date(prevContainer.RecordedAt)).getTime()) / 1000.0
                     return {
                         ...container,
-                        NetworkRxBytesPerSecond: (container.NetworkRxBytes - prevContainer.NetworkRxBytes) / SecondsSinceLastUpdate,
-                        NetworkTxBytesPerSecond: (container.NetworkTxBytes - prevContainer.NetworkTxBytes) / SecondsSinceLastUpdate
+                        NetworkRxBytesPerSecond: (container.NetworkRxBytes - prevContainer.NetworkRxBytes) / secondsSinceLastUpdate,
+                        NetworkTxBytesPerSecond: (container.NetworkTxBytes - prevContainer.NetworkTxBytes) / secondsSinceLastUpdate,
                     }
-                }))
-                return prevContainers.slice(Math.max(prevContainers.length - 11, 0))
+                })
+
+                return [...prevContainers, newSnapshot].slice(-11)
             })
         }
 
@@ -89,24 +91,24 @@ export default function DashboardPage() {
             </section>
             <section className={styles.containerStats}>
                 <h2>Containers</h2>
-                <div role="table">
+                <div className={styles.table} role="table">
                     <div className={styles.tableHead} role="row">
-                        <button onClick={() => setSortAlphabeticallyAscending(prev => !prev)} role="columnheader">
-                            <h3>Name</h3>
+                        <button onClick={() => setSortAlphabeticallyAscending(prev => !prev)}>
+                            <h3 role="columnheader">Name</h3>
                             {sortAlphabeticallyAscending
                                 ? <ArrowDownAZ />
                                 : <ArrowDownZA />
                             }
                         </button>
-                        <button onClick={() => flipSortMetric("status", false)} role="columnheader">
-                            <h3>Status</h3>
+                        <button onClick={() => flipSortMetric("status", false)}>
+                            <h3 role="columnheader">Status</h3>
                             {sortMetric.value === "status" && !sortMetric.asc
                                 ? <ArrowDown01 />
                                 : <ArrowDown10 />
                             }
                         </button>
-                        <button onClick={() => flipSortMetric("cpu", false)} role="columnheader">
-                            <h3>CPU</h3>
+                        <button onClick={() => flipSortMetric("cpu", false)}>
+                            <h3 role="columnheader">CPU</h3>
                             {sortMetric.value !== "cpu"
                                 ? <ArrowDownUp />
                                 : sortMetric.asc
@@ -114,8 +116,8 @@ export default function DashboardPage() {
                                     : <ArrowDownWideNarrow />
                             }
                         </button>
-                        <button onClick={() => flipSortMetric("memory", false)} role="columnheader">
-                            <h3>Memory</h3>
+                        <button onClick={() => flipSortMetric("memory", false)}>
+                            <h3 role="columnheader">Memory</h3>
                             {sortMetric.value !== "memory"
                                 ? <ArrowDownUp />
                                 : sortMetric.asc
@@ -123,8 +125,8 @@ export default function DashboardPage() {
                                     : <ArrowDownWideNarrow />
                             }
                         </button>
-                        <button onClick={() => flipSortMetric("networkRx", false)} role="columnheader">
-                            <h3>Network</h3>
+                        <button onClick={() => flipSortMetric("networkRx", false)}>
+                            <h3 role="columnheader">Network</h3>
                             {sortMetric.value !== "networkRx"
                                 ? <ArrowDownUp />
                                 : sortMetric.asc
@@ -132,8 +134,8 @@ export default function DashboardPage() {
                                     : <ArrowDownWideNarrow />
                             }
                         </button>
-                        <button onClick={() => flipSortMetric("uptime", true)} role="columnheader">
-                            <h3>Uptime</h3>
+                        <button onClick={() => flipSortMetric("uptime", true)}>
+                            <h3 role="columnheader">Uptime</h3>
                             {sortMetric.value !== "uptime"
                                 ? <ArrowDownUp />
                                 : sortMetric.asc

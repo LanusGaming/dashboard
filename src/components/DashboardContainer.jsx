@@ -1,6 +1,6 @@
 import { Download, Upload } from "lucide-react"
-import { statusClasses, formatCpuPercent, formatMemoryBytes, formatNetworkBytes, formatUptimeSeconds } from "../tools/formatting"
-import styles from "../pages/DashboardPage.module.css"
+import { formatCpuPercent, formatMemoryBytes, formatNetworkBytes, formatUptimeSeconds } from "../tools/formatting"
+import styles from "./DashboardContainer.module.css"
 
 export default function DashboardContainer({ container }) {
     const name = container.ContainerName
@@ -10,6 +10,13 @@ export default function DashboardContainer({ container }) {
     const networkRx = formatNetworkBytes(container.NetworkRxBytesPerSecond)
     const networkTx = formatNetworkBytes(container.NetworkTxBytesPerSecond)
     const uptime = formatUptimeSeconds(container.UptimeSeconds)
+
+    const statusClasses = {
+        running: styles.running,
+        exited: styles.exited,
+        paused: styles.paused,
+        restarting: styles.restarting,
+    }
 
     return (
         <div className={[styles.container, statusClasses[status] ?? styles.unknown].join(' ')} role="row">
