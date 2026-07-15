@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Download, Upload, ArrowDownAZ, ArrowDownZA, ArrowDown10, ArrowDown01, ArrowDownUp, ArrowDownWideNarrow, ArrowDownNarrowWide } from 'lucide-react'
-import { api } from '../api/client'
+import { api, getAccessToken } from '../api/client'
 import { formatCpuPercent, formatMemoryBytes, formatNetworkBytes, formatUptimeSeconds, sortContainers } from "../tools/formatting"
 import DashboardContainer from "../components/DashboardContainer"
 import styles from './DashboardPage.module.css'
@@ -11,7 +11,7 @@ export default function DashboardPage() {
     const [sortAlphabeticallyAscending, setSortAlphabeticallyAscending] = useState(true)
 
     useEffect(() => {
-        const es = new EventSource('/api/containers/stream');
+        const es = new EventSource(`/api/containers/stream?access_token=${getAccessToken()}`);
 
         es.onmessage = (event) => {
             const containerData = JSON.parse(event.data)

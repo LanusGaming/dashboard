@@ -5,6 +5,10 @@ export function setAccessToken(token) {
     accessToken = token
 }
 
+export function getAccessToken() {
+    return accessToken
+}
+
 async function request(path, options = {}) {
 
     const response = await fetch(`${BASE_URL}${path}`, {
