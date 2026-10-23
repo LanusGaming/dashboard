@@ -14,25 +14,9 @@ export default function DashboardPage() {
         const es = new EventSource(`/api/containers/stream?access_token=${getAccessToken()}`);
 
         es.onmessage = (event) => {
+            // Network rates (NetworkRx/TxBytesPerSecond) come from the API, computed between its samples
             const containerData = JSON.parse(event.data)
-            setContainers(prevContainers => {
-                prevContainers.push(containerData.map(container => {
-                    if (prevContainers.length === 0)
-                        return { ...container, NetworkRxBytesPerSecond: 0, NetworkTxBytesPerSecond: 0 }
-                    
-                    const prevContainer = prevContainers[prevContainers.length - 1].find(pc => pc.ContainerId === container.ContainerId)
-                    if (prevContainer === undefined)
-                        return { ...container, NetworkRxBytesPerSecond: 0, NetworkTxBytesPerSecond: 0 }
-
-                    const SecondsSinceLastUpdate = ((new Date(container.RecordedAt)).getTime() - (new Date(prevContainer.RecordedAt)).getTime()) / 1000.0
-                    return {
-                        ...container,
-                        NetworkRxBytesPerSecond: (container.NetworkRxBytes - prevContainer.NetworkRxBytes) / SecondsSinceLastUpdate,
-                        NetworkTxBytesPerSecond: (container.NetworkTxBytes - prevContainer.NetworkTxBytes) / SecondsSinceLastUpdate
-                    }
-                }))
-                return prevContainers.slice(Math.max(prevContainers.length - 11, 0))
-            })
+            setContainers(prevContainers => [...prevContainers, containerData].slice(-11))
         }
 
         es.onerror = () => { /** for error handling */ }
